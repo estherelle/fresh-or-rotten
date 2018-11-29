@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
 import requests as rq 
 
+# class that grabs Rotten Tomatoes scores and link to reviews page
 class RTScore:
 
+	# initialized to website of movie on Rotten Tomatoes
 	def __init__(self, url):
 		self.reviewUrl = ''
 		self.set = False
@@ -10,20 +12,13 @@ class RTScore:
 		self.page = rq.get(url).text
 		self.soup = BeautifulSoup(self.page, 'lxml')
 
+	# get the url for the first page of movie reviews
 	def getReviewUrl(self):
 		if not self.set:
 			self.buildReviewUrl()
 		return self.reviewUrl
 
-	def getUrl(self):
-		return self.url
-
-	def getPage(self):
-		return self.page
-
-	def getSoup(self):
-		return self.soup
-
+	# Tomatometer score
 	def criticScore(self):
 		meter = "meter-value superPageFontColor"
 		score = self.soup.find('span', {'class': meter})
@@ -39,12 +34,14 @@ class RTScore:
 
 		return score.text
 
+	# helper function for getting the review url
 	def buildReviewUrl(self, set=False):
 		if self.url[-1] != '/':
 			self.url = self.url + '/'
 		self.reviewUrl = self.url + "reviews/?type=user"
 		return
 
+# Audience Reviews inherits from RTScore
 class AudienceReviews(RTScore):
 
 	def __init__(self, url):
@@ -54,6 +51,7 @@ class AudienceReviews(RTScore):
 		self.curSoup = self.getSoup() 
 		self.nextPageUrl = url
 
+	# to get the url of the next page
 	def nextPage(self):
 
 		paging = 'pageInfo'
@@ -92,6 +90,7 @@ class TextReviews():
 		self.reviews = []
 
 
+	# helper function to page for reviews, outputs as an array of reviews
 	def getReviews(self):
 		for i in range(self.limit):
 			self.reviews += self.page.getReviews()
