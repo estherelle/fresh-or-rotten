@@ -1,5 +1,5 @@
 # fresh-or-rotten
-Predicting IMDB ratings from Twitter tweets
+Predicting Rotten Tomatoes Scores from Audience Reviews
 
 Data Gathering: JSON Scraping.ipynb, score.py	
 
